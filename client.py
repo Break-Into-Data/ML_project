@@ -1,19 +1,27 @@
 import requests
 
 
+BASE_URL = "http://localhost:8000"
+
+
 def main():
+    requests.post(f'{BASE_URL}/reset/')
+    
     URLS = [
         "https://raw.githubusercontent.com/ollama/ollama/main/docs/faq.md",
     ]
     for url in URLS:
-        requests.post('http://localhost:8001/scrape/', json={
+        requests.post(f'{BASE_URL}/scrape/', json={
             "url": url,
         })
     
     while True:        
-        question = input('> Question: ')
+        try:
+            question = input('> Question: ')
+        except KeyboardInterrupt:
+            break
         
-        response = requests.post('http://localhost:8001/ask/', json={
+        response = requests.post(f'{BASE_URL}/ask/', json={
             "question": question,
         })
         response_data = response.json()

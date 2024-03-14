@@ -1,3 +1,6 @@
+import os
+
+import dotenv
 from faiss import IndexFlatL2
 from langchain.globals import set_debug
 from langchain.chains import RetrievalQA
@@ -8,11 +11,17 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.docstore.in_memory import InMemoryDocstore
 
-DEBUG = True
-set_debug(DEBUG)
+
+dotenv.load_dotenv()
+
+
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 
 PROMPT_TEXT = """Human: 
-You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If the context does not contain the answer, just say that you don't know. 
+You are an assistant for question-answering tasks. 
+Use the following pieces of retrieved context to answer the question. 
+If the context does not contain the answer, just say that you don't know. 
 -------- END PROMPT
 Question: 
 {question}
@@ -23,9 +32,11 @@ Context:
 Answer:
 """
 
+set_debug(DEBUG)
+
 
 def create_vectorstore():
-    embedding_function = OpenAIEmbeddings()
+    embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     dimensions: int = len(embedding_function.embed_query("dummy"))
 
     return FAISS(
@@ -45,6 +56,7 @@ class RAGPipeline:
         llm = ChatOpenAI(
             model_name=self.model_name, 
             temperature=self.model_temperature,
+            openai_api_key=OPENAI_API_KEY
         )
         prompt = PromptTemplate(
             input_variables=["question", "answer"], 
