@@ -60,7 +60,7 @@ Here's a basic example of generating an embedding for a string:
   response = openai.Embedding.create(
       input="Hello, world!",
       model="text-similarity-babbage-001"
-)
+  )
   print(response)
   ```
 
@@ -76,7 +76,7 @@ They excel at one critical function: quickly finding the most similar vectors in
 
 When a user submits a query, the system first converts this query into an embedding. The vector store then rapidly searches through potentially millions of stored embeddings to find those that are closest or most similar to the query embedding.
 
-In summary, vector stores play a vital role in our RAG project by enabling fast and efficient similarity searches. 
+In summary, vector stores play a vital role in our RAG project by enabling fast and efficient similarity searches.
 
 ### Example use of Vector Stores
 
