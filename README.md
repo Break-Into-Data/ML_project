@@ -1,4 +1,6 @@
-# Introduction
+# RAG Server Project
+
+## Introduction
 
 Welcome to the project on building a Retrieval-Augmented Generation (RAG) project! This project blends the power of language models with information retrieval to generate responses that are both informed and accurate. Before we start, ensure you have a basic understanding of Python, machine learning concepts, and API interaction.
 

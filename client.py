@@ -11,7 +11,7 @@ def main():
         })
     
     while True:        
-        question = input('Question: ')
+        question = input('> Question: ')
         
         response = requests.post('http://localhost:8001/ask/', json={
             "question": question,
@@ -20,9 +20,10 @@ def main():
         is_ok = response_data.get('ok')
         
         if is_ok:
-            print('Answer:', response_data['answer'])
+            print('> Answer:', response_data['answer'])
         else:
-            print('Error:', response_data)
+            print('> Error:', response_data)
+        print()
 
 
 if __name__ == "__main__":
