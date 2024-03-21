@@ -1,5 +1,5 @@
-from functools import cache
 import os
+from functools import cache
 
 import dotenv
 from faiss import IndexFlatL2
