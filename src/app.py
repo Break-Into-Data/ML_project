@@ -7,11 +7,10 @@ Provides three endpoints:
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from src.rag_pipeline import RAGPipeline
+from src import rag_pipeline_func as rag
 
 
 app = FastAPI()
-rag = RAGPipeline()
 
 
 class ScrapeRequest(BaseModel):
@@ -25,7 +24,8 @@ class AskRequest(BaseModel):
 @app.post("/scrape/")
 async def scrape_url(request: ScrapeRequest):
     """Scrape a URL and store the text in the vectorstore"""
-    rag.scrape_url(request.url)
+    _, vectorstore = rag.init()
+    rag.scrape_url(vectorstore, request.url)
     
     return {
         "ok": True,
@@ -35,7 +35,8 @@ async def scrape_url(request: ScrapeRequest):
 @app.post("/ask/")
 async def ask_question(request: AskRequest):
     """Ask a question and get an answer"""
-    response = rag.ask_question(request.question)
+    pipeline, _ = rag.init()
+    response = rag.ask_question(pipeline, request.question)
     
     return {
         "ok": True,
@@ -46,7 +47,8 @@ async def ask_question(request: AskRequest):
 @app.post("/reset/")
 async def reset_vectorstore():
     """Reset the vectorstore"""
-    rag.reset_vectorstore()
+    _, vectorstore = rag.init()
+    rag.reset_vectorstore(vectorstore)
     
     return {
         "ok": True,
